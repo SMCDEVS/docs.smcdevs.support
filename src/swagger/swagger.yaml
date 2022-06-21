@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Smc-Student-Inquiry-REST-API
+  description: 세명컴퓨터고등학교 학생 조회 REST API 공식 문서
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/SMCDEVS/Smc-Student-Inquiry-REST-API/1.0.0
+  - description: Smc-Student-Inquiry-REST-API
+    url: https://9zq1dxrmdb.execute-api.ap-northeast-2.amazonaws.com/staging
+
+tags: 
+  - name: root
+    description: Request to root path
+  - name: grade
+    description: Request to /grade path
+  - name: class
+    description: Request to /class path
+  - name: number
+    description: Request to /number path
+
+paths:
+  /:
+    post:
+      tags:
+        - root
+      summary: Add a student
+      operationId: addStudent
+      responses:
+        '200':
+          description: Add a student Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Unprocessable Entity
+      requestBody:
+        $ref: '#/components/requestBodies/PostBody'
+    put:
+      tags:
+        - root
+      summary: Update a student
+      operationId: updateStudent
+      responses:
+        '200':
+          description: Update a Student Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '422':
+          description: Unprocessable Entity
+      requestBody:
+        $ref: '#/components/requestBodies/PutBody'
+    delete:
+      tags:
+        - root
+      summary: Delete a student
+      operationId: deleteStudent
+      responses:
+        '200':
+          description: Delete a Student Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DELETE'
+        '422':
+          description: Unprocessable Entity
+  /grade/{grade}:
+    get:
+      tags: 
+        - grade
+      summary: Return students by grade
+      parameters: 
+        - name: grade
+          in: path
+          required: true
+          description: Grade of the student to return
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+components:        
+  schemas:
+    POST:
+      type: object
+      properties:
+        student_id:
+          type: integer
+          example: 2230710
+          description: 학생 ID (년도 뒷자리 두개 + 학년 + 반 + 번호)
+        student_grade:
+          type: integer
+          example: 3
+          description: 학년
+        student_class:
+          type: integer
+          example: 7
+          description: 반
+        student_number:
+          type: integer
+          example: 10
+          description: 번호
+        student_name:
+          type: string
+          example: 홍길동
+          description: 이름
+        regist_year:
+          type: integer
+          example: 2022
+          description: 등록 년도
+    PUT:
+      type: object
+      properties:
+        student_id:
+          type: integer
+          example: 2230710
+          description: 학생 ID (년도 뒷자리 두개 + 학년 + 반 + 번호)
+    DELETE:
+      type: object
+      properties:
+        student_id:
+          type: integer
+          example: 2230710
+          description: 학생 ID (년도 뒷자리 두개 + 학년 + 반 + 번호)
+    ApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Successful operation
+    Student:
+      type: object
+      properties:
+        student_id:
+          type: integer
+          example: 2230710
+          description: 학생 ID (년도 뒷자리 두개 + 학년 + 반 + 번호)
+        student_grade:
+          type: integer
+          example: 3
+          description: 학년
+        student_class:
+          type: integer
+          example: 7
+          description: 반
+        student_number:
+          type: integer
+          example: 10
+          description: 번호
+        student_name:
+          type: string
+          example: 홍길동
+          description: 이름
+        regist_year:
+          type: integer
+          example: 2022
+          description: 등록 년도
+  requestBodies:
+    PostBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POST'
+      description: Student that need to be added to the DB
+      required: true
+    PutBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUT'
+      description: Student that need to be updated to the DB
+      required: true
+    DeleteBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DELETE'
+      description: student that need to be deleted to the DB
+      required: true
